@@ -28,8 +28,8 @@ export class LSystem {
     constructor(str : String) {
         this.str = str;
         this.expandStr = str;
-        this.currTurtle = new Turtle(vec3.fromValues(0, -2, -2), mat4.create());
-        this.structure = new Cube(vec3.fromValues(0, -2, -2));
+        this.currTurtle = new Turtle(vec3.fromValues(0, -10, -2), mat4.create());
+        this.structure = new Cube(vec3.fromValues(0, -10, -2));
         this.foliage = new Mesh(vec3.fromValues(0, -2, -2));
         this.tStack = [];
     }
@@ -116,10 +116,8 @@ export class LSystem {
 
             } else if (curr == 'S') {
                 // draw sphere at position
-                this.foliage.addPositions(this.currTurtle.turtlePos, sphereSize);
+                this.foliage.addPositions(this.currTurtle.turtlePos, sphereSize * (Math.random() + 0.5));
                 sCount++;
-                //this.foliage.addPositions(vec3.fromValues(0, 0, 0), sphereSize * 2);
-                //sCount++;
 
             } else if (curr == 'B') {
                 // draw base

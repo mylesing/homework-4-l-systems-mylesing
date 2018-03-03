@@ -35,28 +35,21 @@ let lsystem: LSystem = new LSystem('BBBBBBB[XYS]F[XYS]F[+YS]FF[-YS]F[XYS]FF[XYS]
 var OBJ = require('webgl-obj-loader');
 
 function loadScene() {
+  // generate plane
+  square.create();
+
+  // reset el systema
   lsystem.reset();
-  // Initial call to load scene
+
+  // initial call to load scene
   lsystem.expand(controls.expand);
+
+  // re-draw and re-create
   lsystem.draw();
   cube = lsystem.structure;
   spheres = lsystem.foliage;
   cube.create();
   spheres.create();
-  var str1 = '';
-  for (let i = 0; i < cube.positions.length; ++i) {
-    str1 = str1 + ', ' + cube.positions[i];
-  }
-
-  var str2 = '';
-  for (let i = 0; i < cube.normals.length; ++i) {
-    str2 = str2 + ', ' + cube.normals[i];
-  }
-
-  var str = '';
-  for (let i = 0; i < cube.indices.length; ++i) {
-    str = str + ', ' + cube.indices[i];
-  }
 
 }
 
@@ -81,9 +74,6 @@ export function main() {
   // adding color control to GUI
   gui.addColor(controls, 'treeColor');
   gui.addColor(controls, 'bubbleColor');
-  // gui
-  // gui.add(controls, 'shader', ['lambert', 'funky bounce']);
-  // gui.add(controls, 'shape', ['cube', 'square']);
   gui.add(controls, 'expand', 0, 5).step(1);
 
   // get canvas and webgl context
@@ -95,6 +85,8 @@ export function main() {
   // `setGL` is a function imported above which sets the value of `gl` in the `globals.ts` module.
   // Later, we can import `gl` from `globals.ts` to access it
   setGL(gl);
+
+  square = new Square(vec3.fromValues(0, 0, 0));
 
   loadScene();
 
@@ -110,8 +102,8 @@ export function main() {
 
   let shader: ShaderProgram;
   shader = new ShaderProgram([
-    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
-    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+    new Shader(gl.VERTEX_SHADER, require('./shaders/tree-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/tree-frag.glsl')),
   ]);
 
   let cloudShader: ShaderProgram;
@@ -119,6 +111,13 @@ export function main() {
     new Shader(gl.VERTEX_SHADER, require('./shaders/cloud-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/cloud-frag.glsl')),
   ]);
+
+  let ground: ShaderProgram;
+  ground = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
+  ]);
+
 
   // This function will be called every frame
   function tick() {
@@ -132,12 +131,14 @@ export function main() {
     renderer.clear();
     // set time
     //console.log(`time = ` + time);
-    shader.setTime(time++);
+    shader.setTime(time);
+    ground.setTime(time);
     cloudShader.setTime(time++);
     // set color 
     treeCol = vec4.fromValues(controls.treeColor[0] / 255.0, controls.treeColor[1] / 255.0, controls.treeColor[2] / 255.0, 1.0);
     bubbCol = vec4.fromValues(controls.bubbleColor[0] / 255.0, controls.bubbleColor[1] / 255.0, controls.bubbleColor[2] / 255.0, 1.0);
     shader.setGeometryColor(treeCol);
+    ground.setGeometryColor(treeCol);
     cloudShader.setGeometryColor(bubbCol);
 
     // render tree
@@ -148,6 +149,10 @@ export function main() {
     // render bubbles
     renderer.render(camera, cloudShader, [
       spheres,
+    ]);
+
+    renderer.render(camera, ground, [
+      square,
     ]);
 
     stats.end();

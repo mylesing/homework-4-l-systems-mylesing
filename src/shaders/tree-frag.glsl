@@ -26,7 +26,7 @@ out vec4 out_Col; // This is the final output color that you will see on your
 void main()
 {
     // Material base color (before shading)
-        vec4 diffuseColor = vec4(0.5, 1.0, 0.0, 1.0);
+        vec4 diffuseColor = vec4(u_Color.xyz - 0.5 * fs_Pos.xyz, 1.0);
 
         // Calculate the diffuse term for Lambert shading
         float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));

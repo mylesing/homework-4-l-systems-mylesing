@@ -1,37 +1,34 @@
 # Homework 4: L-systems
 
-For this assignment, you will design a set of formal grammar rules to create
-a plant life using an L-system program. Once again, you will work from a
-Typescript / WebGL 2.0 base code like the one you used in homework 0. You will
-implement your own set of classes to handle the L-system grammar expansion and
-drawing. You will rasterize your L-system using faceted geometry. Feel free
-to use ray marching to generate an interesting background, but trying to
-raymarch an entire L-system will take too long to render!
+## Description
+Emiliya Al Yafei • PennKey: alyafei
 
-## L-System Components
-The way you implement your L-System is ultimately up to you, but we recommend
-creating the following classes / constructs to help you instantiate, expand, and
-draw your grammars:
-* Some sort of expandable collection of string characters. You might implement
-a linked list data structure, or you might use a basic Javascript array (which
-is resizeable).
-* Some sort of class to represent a Rule for expanding a character into a
-string. You might consider creating a map within each Rule that maps
-probabilities to strings, so that a Rule can represent multiple possible
-expansions for a character with different probabilities.
-* A second Rule-style class that dictates what drawing operation should be
-performed when a character is parsed during the drawing process. This should
-also be a map of probabilities, but this time the values in the map will be
-functions rather than strings. Invoke a given function, e.g. `drawBranch`, when
-a character is parsed.
-* A Turtle class that lets you keep track of, at minimum, a position, an
-orientation, and a depth. You should also create a stack onto which you can push
-and pop turtle states.
-* A class in which to store the VBOs that will represent __all__ of your faceted
-geometry. __Do not draw individual mesh components one at a time. This will
-cause your program to render very slowly.__ Instead, expand lists of vertex
-information as you "draw" your grammar, and push all VBO data to the GPU at once
-after you've finished parsing your entire string for drawing.
+Space cube tree!
+
+Cubes are dirrently colored as the tree grows. Instead of foliage, a glowering aura appears around the tree. 
+
+![](tree1.png)
+
+![](tree2.png)
+
+## Rules
+[F] : grow upwards
+[X] : get a random X-Z direction
+[Y] : move a random amount in some direction
+[+/-] : move in +ive or -ive X direction
+[S] : draw aura sphere
+[B] : set up base
+
+[Expansion:]
+* 'X' --> 'FF[−XYS]FFF[XYS][−XS]+XYS'
+* 'F' --> 'F[XYS]'
+* '+', 'F[+YS]FFF[XYS][−XS]+XYS'
+* '-', 'F[-YS]FFF[XYS][−XS]+XYS'
+* 'B', 'B'
+
+## Problems Occured
+The OBJ loader indexes the vertices wrong. This seems to be more of a result of the sphere than of the Mesh class itself.
+
 
 ## OBJ loading
 So that you can more easily generate interesting-looking plants, we ask that you
