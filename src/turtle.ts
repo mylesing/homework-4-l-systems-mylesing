@@ -1,37 +1,5 @@
 import {vec3, vec4, mat4} from 'gl-matrix';
 
-// stack class for turtle
-export class Stack {
-    // member variable
-    stack: Turtle[];
-
-    // initialize empty stack
-    constructor(){
-        this.stack = [];
-    }
-
-    // push on top of the stack
-    addTurtle(t : Turtle) {
-        this.stack.push(t);
-    }
-
-    // remove variable at the top of the stack and return it
-    removeTurtle() : Turtle {
-        return this.stack.pop();
-    }
-
-    // look at the top of the stack without popping
-    peekTurtle() : Turtle {
-        return this.stack[this.stack.length - 1];
-    }
-
-    // check if empty
-    isEmpty() {
-        return this.stack.length === 0;
-    }
-
-}
-
 // returns a rotation matrix from inputs
 export function rotate(angle : number, x : number, y : number, z : number) : mat4 {
     var theta = 3.1415 * (angle / 180.0);
