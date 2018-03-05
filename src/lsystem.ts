@@ -1,5 +1,5 @@
 import Dictionary from './dictionary';
-import { Stack, Turtle } from './turtle';
+import Turtle from './turtle';
 import {vec3, vec4, mat4} from 'gl-matrix';
 import Cube from './geometry/Cube';
 import Mesh from './geometry/Mesh';

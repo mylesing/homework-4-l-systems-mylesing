@@ -69,4 +69,4 @@ export class Turtle {
 
 };
 
-export default Stack; Turtle;
+export default Turtle;
